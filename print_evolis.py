@@ -54,20 +54,16 @@ def print_card():
             response = requests.get(link_pdf)
             pdf_data = response.content
 
-            # Generate a random file name
-            file_name = str(uuid.uuid4())+'.bmp'
-            folder_path = "examples/"
-
-            if not os.path.exists(folder_path):
-                os.makedirs(folder_path)
-
+           # Get original file name with extension
+            file_name_with_extension = os.path.basename(link_pdf)
+            
             # Caminho completo do arquivo na pasta "examples"
-            file_path = os.path.join(folder_path, file_name)
-
+            file_path = os.path.join(folder_path, file_name_with_extension)
+            
             # Save PDF temporarily na pasta "examples"
             with open(file_path, "wb") as f:
                 f.write(pdf_data)
-
+            
 
             # Especificando o caminho completo para a pasta "examples"
           
@@ -85,9 +81,11 @@ def print_card():
             ps = evolis.PrintSession(co)
 
             # Set main image:
-            if not ps.set_image(evolis.CardFace.FRONT, "examples/"+file_name ):
-                print("> Error: can't load file"+file_name)
+           
+            if not ps.set_image(evolis.CardFace.FRONT, file_path):
+                print("> Error: can't load file" + file_path)
                 return EXIT_FAILURE
+
 
             # Set Overlay image:
             
