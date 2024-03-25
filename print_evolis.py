@@ -1,10 +1,12 @@
+import win32print
+import win32ui
+import fitz
+from PIL import Image, ImageWin
 
 @app.route('/imprimir_declaracao', methods=['POST'])
 def imprimir_declaracao():
     try:
-        # Get PDF link from request
         link_pdf = request.json.get('link')
-        print("Imprimindo a sua declaração ")
         if link_pdf is None:
             return jsonify({'error': 'Link do PDF não fornecido'}), 400
 
@@ -19,19 +21,14 @@ def imprimir_declaracao():
 
         # Get default printer
         impressoras = listar_impressoras_disponiveis()
-        impressora = impressoras[3]
-        
-        namee = utils.get_printer_name()
-        print(namee)
-        print(impressora)
-        
-        printer_name = win32print.SetDefaultPrinterW(impressora)
+        impressora = impressoras[3]  # Escolha uma impressora específica da lista
 
-           
-        
+        # Define a impressora padrão
+        win32print.SetDefaultPrinter(impressora)
+
         # Create printing context
         hDC = win32ui.CreateDC()
-        hDC.CreatePrinterDC(printer_name)
+        hDC.CreatePrinterDC()
 
         # Open the PDF with PyMuPDF
         pdf_document = fitz.open(file_name)
@@ -69,5 +66,4 @@ def imprimir_declaracao():
         return jsonify({'message': 'PDF impresso com sucesso'}), 200
 
     except Exception as e:
-        print(e)
         return jsonify({'error': str(e)}), 500
