@@ -1,0 +1,11 @@
+RewriteEngine On
+
+# Redireciona todas as requisições para o servidor Node.js rodando na porta 3000 (ajuste conforme necessário)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ http://localhost:3000/$1 [P,L]
+
+# Permite arquivos estáticos (CSS, JS, imagens, etc.)
+<FilesMatch "\.(jpg|jpeg|png|gif|css|js|ico|woff|woff2|ttf|otf|eot|svg)$">
+    Header set Cache-Control "max-age=31536000, public"
+</FilesMatch>
