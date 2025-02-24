@@ -1,0 +1,14 @@
+RewriteEngine On
+RewriteBase /
+
+# Se o arquivo solicitado nПлкo existe, direcione para o index.html
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
+
+<Directory /var/www/licenca>
+    Options Indexes FollowSymLinks
+    AllowOverride All
+    Require all granted
+</Directory>
