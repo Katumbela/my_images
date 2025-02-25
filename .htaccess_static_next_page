@@ -1,0 +1,21 @@
+# Ativar o módulo de reescrita
+RewriteEngine On
+
+# Forçar HTTPS (se necessário)
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Definir o diretório base da aplicação
+RewriteBase /
+
+# Permitir acesso a arquivos e diretórios existentes
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Reescrever URLs amigáveis para arquivos gerados pelo Next.js
+RewriteRule ^(.*)/$ $1/index.html [L]
+RewriteRule ^(.*)$ $1.html [L]
+
+# Página 404 personalizada
+ErrorDocument 404 /404.html
